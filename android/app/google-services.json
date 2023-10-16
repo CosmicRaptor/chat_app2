@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875927214436",
+    "project_id": "chat-app-370ea",
+    "storage_bucket": "chat-app-370ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875927214436:android:4cd060b5d1cbffb38fc271",
+        "android_client_info": {
+          "package_name": "xyz.ibrokeit.chat_app2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHoCRs_TNbHJ6QYiIP22OiBnnQmgG4Dmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
