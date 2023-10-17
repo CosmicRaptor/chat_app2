@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:chat_app2/screens/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 
 //Screen size object
@@ -8,8 +9,12 @@ late Size mq;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  _initialiseFirebase();
-  runApp(const MyApp());
+
+  // Only allow app in portrait mode
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {
+    _initialiseFirebase();
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {

@@ -12,7 +12,20 @@
           "package_name": "xyz.ibrokeit.chat_app2"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "875927214436-k9oeuog3he7m0b893k8dbfd4ea0bu13h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "xyz.ibrokeit.chat_app2",
+            "certificate_hash": "bf7db300526adbdb7a61ec16d97cf860ea863102"
+          }
+        },
+        {
+          "client_id": "875927214436-o0n1ogggg92j5d7etarir92n96f5i5c9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBHoCRs_TNbHJ6QYiIP22OiBnnQmgG4Dmc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875927214436-o0n1ogggg92j5d7etarir92n96f5i5c9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
