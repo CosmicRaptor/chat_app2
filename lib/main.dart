@@ -1,5 +1,5 @@
+import 'package:chat_app2/screens/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_app2/screens/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
@@ -13,12 +13,18 @@ void main() {
   // Only allow app in portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {
     _initialiseFirebase();
-    runApp(const MyApp());
+    runApp(MyApp());
   });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
 
   // This widget is the root of your application.
   @override
@@ -31,7 +37,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true
         )
       ),
-      home: LoginScreen(),
+      home: LoadingScreen(),
     );
   }
 }

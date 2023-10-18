@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'package:chat_app2/api/apis.dart';
 import 'package:chat_app2/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _googleLoginButtonClick(){
     showDialog(context: context, builder: (_) => const Center(child: CircularProgressIndicator(),));
-    _signInWithGoogle().then((user) {Navigator.pop(context); Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));});
+    _signInWithGoogle().then((user) async{
+      log(user.user.toString());
+      log(user.additionalUserInfo.toString());
+      Navigator.pop(context);
+      if ((await APIs.userExist())){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));}
+
+      else {
+        await APIs.createUser().then((value){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+        });
+        }}
+      );
   }
 
   Future<UserCredential> _signInWithGoogle() async {
@@ -45,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return await APIs.auth.signInWithCredential(credential);
   }
 
 
