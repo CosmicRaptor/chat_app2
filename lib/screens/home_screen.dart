@@ -21,6 +21,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   List<ChatUser> list = [];
+  final List<ChatUser> _searchList = [];
+  bool _isSearching = false;
+
   @override
   void initState() {
     super.initState();
@@ -31,9 +34,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Damned Chat'),
+        title: _isSearching ?
+            TextField(
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Name/Email',
+                hintStyle: TextStyle(fontSize: 17, color: Colors.white)
+              ),
+              autofocus: true,
+              style: const TextStyle(
+                fontSize: 17, color: Colors.white, letterSpacing: 1,
+              ),
+              onChanged: (val){
+                _searchList.clear();
+                for (var i in list){
+                  if (i.name.toLowerCase().contains(val) || i.email.toLowerCase().contains(val)){
+                    _searchList.add(i);
+                  }
+                  setState(() {
+                    _searchList;
+                  });
+                }
+              },
+            )
+            : const Text('Damned Chat'),
         leading: const Icon(CupertinoIcons.home),
         actions: [
+          IconButton(onPressed: (){
+            setState(() {
+              _isSearching = !_isSearching;
+            });
+          }, icon: Icon(_isSearching ? Icons.cancel : Icons.search)),
           IconButton(onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (_) => UserProfile(user: APIs.loggedUser,)));
           }, icon: const Icon(CupertinoIcons.ellipsis_vertical))
@@ -54,10 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
           list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
           if (list.isNotEmpty) {
             return ListView.builder(
-                itemCount: list.length,
-                physics: BouncingScrollPhysics(),
+                itemCount: _isSearching ? _searchList.length : list.length,
+                physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index){
-                  return ChatUserCard(user: list[index],);
+                  return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
                 });
         }
         else{
