@@ -1,6 +1,7 @@
 
 import 'package:chat_app2/api/apis.dart';
 import 'package:chat_app2/screens/auth/login_screen.dart';
+import 'package:chat_app2/screens/user_profile.dart';
 import 'package:chat_app2/widgets/chat_user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +21,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   List<ChatUser> list = [];
+  @override
+  void initState() {
+    super.initState();
+    APIs.getLoggedInUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Damned Chat'),
         leading: const Icon(CupertinoIcons.home),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(CupertinoIcons.ellipsis_vertical))
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (_) => UserProfile(user: APIs.loggedUser,)));
+          }, icon: const Icon(CupertinoIcons.ellipsis_vertical))
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -40,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add_comment_outlined),
       ),
       body: StreamBuilder(
-        stream: APIs.firestore.collection('users').snapshots(),
+        stream: APIs.getAllUsers(),
         builder: (context, snapshot) {
           final data = snapshot.data?.docs;
           list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
