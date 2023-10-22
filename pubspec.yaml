@@ -39,6 +39,7 @@ dependencies:
   cached_network_image: ^3.3.0
   image_picker: ^1.0.4
   firebase_storage: ^11.3.1
+  chat_bubbles: ^1.5.0
 
 
   # The following adds the Cupertino Icons font to your application.

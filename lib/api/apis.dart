@@ -63,4 +63,11 @@ class APIs {
       'image': loggedUser.image
     });
   }
+
+  ///Chat Screen related stuff is below!
+
+  // gets all messages of a conversation
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    return firestore.collection('messages').snapshots();
+  }
 }
