@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app2/models/chat_user.dart';
@@ -21,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
 
   List<Message> list = [];
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +35,13 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Expanded(
                 child: StreamBuilder(
-                    stream: APIs.getAllMessages(),
+                    stream: APIs.getAllMessages(widget.user),
                     builder: (context, snapshot) {
                       final data = snapshot.data?.docs;
-                      log('Data: ${jsonEncode(data![0].data())}');
-                      //list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
-                      list.clear();
-                      list.add(Message(toID: '1234', msg: 'aaaaaa', type: Type.text, fromID: APIs.user.uid, sent: '12:00'));
-                      list.add(Message(toID: APIs.user.uid, msg: 'bbbbbb', type: Type.text, fromID: '5678', sent: '14:00'));
+                      //log('Data: ${jsonEncode(data![0].data())}');
+                      list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
+                      print(list);
+
                       if (list.isNotEmpty) {
                         return ListView.builder(
                             itemCount: list.length,
@@ -115,25 +113,31 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Row(
               children: [
-                IconButton(onPressed: (){}, icon: Icon(Icons.emoji_emotions_outlined), color: Colors.lightBlue,),
-                const Expanded(child: TextField(
-                  decoration: InputDecoration(border: InputBorder.none,
+                IconButton(onPressed: (){}, icon: const Icon(Icons.emoji_emotions_outlined), color: Colors.lightBlue,),
+                Expanded(child: TextField(
+                  controller: _textController,
+                  decoration: const InputDecoration(border: InputBorder.none,
                   hintText: 'Message'),
-                  style: TextStyle(color: Colors.black54),
+                  style: const TextStyle(color: Colors.black54),
                 )),
-                IconButton(onPressed: (){}, icon: Icon(Icons.image_outlined), color: Colors.lightBlue,),
-                IconButton(onPressed: (){}, icon: Icon(Icons.camera_alt_outlined), color: Colors.lightBlue,),
+                IconButton(onPressed: (){}, icon: const Icon(Icons.image_outlined), color: Colors.lightBlue,),
+                IconButton(onPressed: (){}, icon: const Icon(Icons.camera_alt_outlined), color: Colors.lightBlue,),
               ],
             ),
           ),
         ),
-        SizedBox(width: 5,),
+        const SizedBox(width: 5,),
         Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.lightBlue,
             ),
-            child: IconButton(onPressed: (){}, icon: Icon(Icons.send, color: Colors.white,)))
+            child: IconButton(onPressed: (){
+              if (_textController.text.isNotEmpty){
+                APIs.sendMessage(widget.user, _textController.text);
+                _textController.text = '';
+              }
+            }, icon: const Icon(Icons.send, color: Colors.white,)))
       ],
     );
   }
