@@ -19,7 +19,8 @@ import '../main.dart';
 
 class UserProfile extends StatefulWidget {
   final ChatUser user;
-  const UserProfile({super.key, required this.user});
+  final Function updateState;
+  const UserProfile({super.key, required this.user, required this.updateState});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -38,6 +39,7 @@ class _UserProfileState extends State<UserProfile> {
   void setTheStateAfterButtonClick(){
     setState(() {
       getColor();
+      widget.updateState();
       selectedColor;
     });
   }
@@ -109,7 +111,7 @@ class _UserProfileState extends State<UserProfile> {
                           bottom: 0,
                           right: 0,
                           left: 95,
-                          child: MaterialButton(elevation: 0, onPressed: (){_showBottomSheet();}, color: Colors.white, shape: const CircleBorder(), child: const Icon(Icons.edit, color: Colors.blue,),))
+                          child: MaterialButton(elevation: 0, onPressed: (){_showBottomSheet();}, color: Colors.white, shape: const CircleBorder(), child:  Icon(Icons.edit, color: selectedColor),))
                     ],
                   ),
                 ),
@@ -121,7 +123,7 @@ class _UserProfileState extends State<UserProfile> {
                   onSaved: (val) => APIs.loggedUser.name = val ?? '',
                   validator: (val) => val != null && val.isNotEmpty ? null : 'Required Field',
                   decoration:  InputDecoration(
-                    prefixIcon: const Icon(Icons.person, color: Colors.blue),
+                    prefixIcon:  Icon(Icons.person, color: selectedColor),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     label: const Text('Username')
                   ),
@@ -132,7 +134,7 @@ class _UserProfileState extends State<UserProfile> {
                   onSaved: (val) => APIs.loggedUser.about = val ?? '',
                   validator: (val) => val != null && val.isNotEmpty ? null : 'Required Field',
                   decoration:  InputDecoration(
-                      prefixIcon: const Icon(Icons.edit, color: Colors.blue,),
+                      prefixIcon:  Icon(Icons.edit, color: selectedColor,),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       label: const Text('About me')
                   ),
@@ -148,6 +150,7 @@ class _UserProfileState extends State<UserProfile> {
                   }
                 }, icon: const Icon(Icons.save), label: const Text('Save'),
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: selectedColor,
                   shape: const StadiumBorder(),
                   minimumSize: const Size(200, 50)
                 ),),

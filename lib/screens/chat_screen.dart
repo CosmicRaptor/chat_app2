@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_app2/main.dart';
 import 'package:chat_app2/models/chat_user.dart';
 import 'package:chat_app2/models/message.dart';
 import 'package:chat_app2/widgets/message_card.dart';
@@ -30,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: selectedColor,
           automaticallyImplyLeading: false,
           flexibleSpace: _appbar(),
         ),
@@ -70,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: EmojiPicker(
 
                   textEditingController: _textController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
-                  config: Config(
+                  config: const Config(
                     columns: 7,
                     emojiSizeMax: 32 * (1.0)
                   )
@@ -124,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
           // Input field and buttons
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.lightBlue, width: 2),
+                border: Border.all(color: selectedColor, width: 2),
                 borderRadius: BorderRadius.circular(20)
             ),
             child: Row(
@@ -134,7 +136,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     _showEmoji =! _showEmoji;
                     //print(_showEmoji);
                   });
-                }, icon: const Icon(Icons.emoji_emotions_outlined), color: Colors.lightBlue,),
+                }, icon:  const Icon(Icons.emoji_emotions_outlined), color: selectedColor,),
                 Expanded(child: TextField(
                   controller: _textController,
                   decoration: const InputDecoration(border: InputBorder.none,
@@ -150,7 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       await APIs.sendChatImage(widget.user, File(i.path));
                     }
                   }
-                }, icon: const Icon(Icons.image_outlined), color: Colors.lightBlue,),
+                }, icon: const Icon(Icons.image_outlined), color: selectedColor,),
                 IconButton(onPressed: () async {
                   final ImagePicker picker = ImagePicker();
                   // Pick an image.
@@ -158,16 +160,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   if (image != null){
                     await APIs.sendChatImage(widget.user, File(image.path));
                   }
-                }, icon: const Icon(Icons.camera_alt_outlined), color: Colors.lightBlue,),
+                }, icon: const Icon(Icons.camera_alt_outlined), color: selectedColor,),
               ],
             ),
           ),
         ),
         const SizedBox(width: 5,),
         Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.lightBlue,
+              color: selectedColor,
             ),
             child: IconButton(onPressed: (){
               if (_textController.text.isNotEmpty){

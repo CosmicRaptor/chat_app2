@@ -1,5 +1,6 @@
 
 import 'package:chat_app2/api/apis.dart';
+import 'package:chat_app2/main.dart';
 import 'package:chat_app2/screens/auth/login_screen.dart';
 import 'package:chat_app2/screens/user_profile.dart';
 import 'package:chat_app2/widgets/chat_user_card.dart';
@@ -30,10 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
     APIs.getLoggedInUser();
   }
 
+  void _changeState(){
+    setState(() {
+      selectedColor;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: selectedColor,
         title: _isSearching ?
             TextField(
               decoration: const InputDecoration(
@@ -66,17 +74,18 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           }, icon: Icon(_isSearching ? Icons.cancel : Icons.search)),
           IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (_) => UserProfile(user: APIs.loggedUser,)));
+            Navigator.push(context, MaterialPageRoute(builder: (_) => UserProfile(user: APIs.loggedUser, updateState:() => _changeState(),)));
           }, icon: const Icon(CupertinoIcons.ellipsis_vertical))
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: selectedColor,
         onPressed: () async{
           await FirebaseAuth.instance.signOut();
           await GoogleSignIn().signOut();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginScreen()));
         },
-        child: Icon(Icons.add_comment_outlined),
+        child: const Icon(Icons.add_comment_outlined),
       ),
       body: StreamBuilder(
         stream: APIs.getAllUsers(),
