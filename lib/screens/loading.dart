@@ -4,6 +4,8 @@ import 'package:chat_app2/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../main.dart';
+
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
 
@@ -15,9 +17,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), (){
-      SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(systemNavigationBarColor: Colors.white, statusBarColor: Colors.indigo.shade900));
-
+    Future.delayed(const Duration(seconds: 2), () async{
+      SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(systemNavigationBarColor: Colors.white, statusBarColor: selectedColor));
       if(APIs.auth.currentUser != null) {
         //Navigator.pop(context);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));

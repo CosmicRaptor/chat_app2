@@ -3,13 +3,17 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app2/api/apis.dart';
+import 'package:chat_app2/api/local_database.dart';
 import 'package:chat_app2/models/chat_user.dart';
 import 'package:chat_app2/screens/auth/login_screen.dart';
+import 'package:chat_app2/widgets/color_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../main.dart';
 
 
 
@@ -26,11 +30,30 @@ class _UserProfileState extends State<UserProfile> {
   final _formKey = GlobalKey<FormState>();
   String? _image;
 
+  getColor() async {
+    selectedColor = Color(await DB.getColor());
+    //print(selectedColor);
+  }
+
+  void setTheStateAfterButtonClick(){
+    setState(() {
+      getColor();
+      selectedColor;
+    });
+  }
+
+  @override
+  void initState()  {
+    getColor();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        backgroundColor: selectedColor,
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.redAccent,
@@ -115,6 +138,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 ),
                 const SizedBox(height: 50,),
+                ColorPickerWidget(onColorSelected: () => setTheStateAfterButtonClick()),
                 ElevatedButton.icon(onPressed: (){
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
@@ -126,7 +150,8 @@ class _UserProfileState extends State<UserProfile> {
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
                   minimumSize: const Size(200, 50)
-                ),)
+                ),),
+
               ],
             ),
           ),
@@ -183,7 +208,7 @@ class _UserProfileState extends State<UserProfile> {
                     APIs.updateProfilePic(File(_image!));
                     Navigator.pop(context);
                   },
-                  child: const Icon(Icons.add_a_photo, color: Colors.black, size: 100,))
+                  child: const Icon(Icons.add_a_photo, color: Colors.black, size: 100,)),
             ],
           )
         ],

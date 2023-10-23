@@ -50,7 +50,9 @@ class _ChatUserCardState extends State<ChatUserCard> {
                   ),
                 ),
                 title: Text(widget.user.name),
-                subtitle: Text(_message != null ? _message!.msg : widget.user.about, maxLines: 1,),
+                subtitle: Text(_message != null ?
+                _message!.type == Type.image ? 'image' :
+                _message!.msg : widget.user.about, maxLines: 1,),
                 trailing: _message != null ? Text(DateUtil.getLastMessageTime(context: context, time: _message!.sent)) :Text(widget.user.createdAt),
               );
         })

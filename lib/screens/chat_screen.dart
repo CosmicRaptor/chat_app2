@@ -1,11 +1,14 @@
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app2/models/chat_user.dart';
 import 'package:chat_app2/models/message.dart';
 import 'package:chat_app2/widgets/message_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import '../api/apis.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -20,6 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<Message> list = [];
   final _textController = TextEditingController();
+  bool _showEmoji = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +44,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       final data = snapshot.data?.docs;
                       //log('Data: ${jsonEncode(data![0].data())}');
                       list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
-                      print(list);
+                      //print(list);
 
                       if (list.isNotEmpty) {
                         return ListView.builder(
+                          reverse: true,
                             itemCount: list.length,
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index){
@@ -58,7 +63,18 @@ class _ChatScreenState extends State<ChatScreen> {
                     }
                 ),
               ),
-              _chatInput()
+              _chatInput(),
+              if (_showEmoji == true)
+                SizedBox(
+                  height: 300,
+                  child: EmojiPicker(
+
+                  textEditingController: _textController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                  config: Config(
+                    columns: 7,
+                    emojiSizeMax: 32 * (1.0)
+                  )
+                ))
             ],
           ),
         ),
@@ -113,15 +129,36 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Row(
               children: [
-                IconButton(onPressed: (){}, icon: const Icon(Icons.emoji_emotions_outlined), color: Colors.lightBlue,),
+                IconButton(onPressed: (){
+                  setState(() {
+                    _showEmoji =! _showEmoji;
+                    //print(_showEmoji);
+                  });
+                }, icon: const Icon(Icons.emoji_emotions_outlined), color: Colors.lightBlue,),
                 Expanded(child: TextField(
                   controller: _textController,
                   decoration: const InputDecoration(border: InputBorder.none,
                   hintText: 'Message'),
                   style: const TextStyle(color: Colors.black54),
                 )),
-                IconButton(onPressed: (){}, icon: const Icon(Icons.image_outlined), color: Colors.lightBlue,),
-                IconButton(onPressed: (){}, icon: const Icon(Icons.camera_alt_outlined), color: Colors.lightBlue,),
+                IconButton(onPressed: () async {
+                  final ImagePicker picker = ImagePicker();
+                  // Pick an image.
+                  final List<XFile> images = await picker.pickMultiImage();
+                  if (images.isNotEmpty){
+                    for (var i in images){
+                      await APIs.sendChatImage(widget.user, File(i.path));
+                    }
+                  }
+                }, icon: const Icon(Icons.image_outlined), color: Colors.lightBlue,),
+                IconButton(onPressed: () async {
+                  final ImagePicker picker = ImagePicker();
+                  // Pick an image.
+                  final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                  if (image != null){
+                    await APIs.sendChatImage(widget.user, File(image.path));
+                  }
+                }, icon: const Icon(Icons.camera_alt_outlined), color: Colors.lightBlue,),
               ],
             ),
           ),
@@ -134,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: IconButton(onPressed: (){
               if (_textController.text.isNotEmpty){
-                APIs.sendMessage(widget.user, _textController.text);
+                APIs.sendMessage(widget.user, _textController.text, Type.text);
                 _textController.text = '';
               }
             }, icon: const Icon(Icons.send, color: Colors.white,)))
