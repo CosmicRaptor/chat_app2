@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 late Size mq;
 
 late Color selectedColor;
+late String selectedTheme;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ void main() {
   // Only allow app in portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) async{
     await _getColor();
+    await _getTheme();
     _initialiseFirebase();
     runApp(MyApp());
   });
@@ -55,4 +57,8 @@ _initialiseFirebase() async {
 
 _getColor() async{
   selectedColor = Color(await DB.getColor());
+}
+
+_getTheme() async{
+  selectedTheme = await DB.getTheme();
 }

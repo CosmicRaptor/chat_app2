@@ -21,4 +21,14 @@ class DB{
     return prefs.getInt('selectedColor') ?? Colors.indigo.shade900.value;
   }
 
+  static Future<String> getTheme() async {
+    var prefs = await SharedPreferences.getInstance();
+    return prefs.getString('theme') ?? 'light';
+  }
+
+  static Future<void> setTheme(String theme) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('theme', theme);
+  }
+
 }

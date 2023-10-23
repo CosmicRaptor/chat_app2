@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../api/apis.dart';
+import '../main.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUser user;
@@ -23,7 +24,8 @@ class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      color: selectedTheme == 'Light' ? Colors.white : Colors.grey.shade800,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: InkWell(
         onTap: (){
@@ -49,11 +51,11 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person),),
                   ),
                 ),
-                title: Text(widget.user.name),
+                title: Text(widget.user.name, style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
                 subtitle: Text(_message != null ?
                 _message!.type == Type.image ? 'image' :
-                _message!.msg : widget.user.about, maxLines: 1,),
-                trailing: _message != null ? Text(DateUtil.getLastMessageTime(context: context, time: _message!.sent)) :Text(widget.user.createdAt),
+                _message!.msg : widget.user.about, maxLines: 1, style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
+                trailing: _message != null ? Text(DateUtil.getLastMessageTime(context: context, time: _message!.sent), style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),) :Text(widget.user.createdAt, style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
               );
         })
       ),
