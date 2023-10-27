@@ -26,6 +26,18 @@ class APIs {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
   }
 
+  //add user to chat list
+  static Future<bool> addUser(String email) async {
+    final data = await firestore.collection('users').where('email', isEqualTo: email).get();
+    if (data.docs.isNotEmpty && data.docs.first.id != user.uid) {
+      firestore.collection('users').doc(user.uid).collection('added_users').doc(data.docs.first.id).set({});
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   static Future<void> getLoggedInUser() async{
     await firestore.collection('users').doc(user.uid).get().then((user) async{
       if (user.exists){
@@ -44,8 +56,13 @@ class APIs {
     await firestore.collection('users').doc(user.uid).set(chatuser.toJson());
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
-    return firestore.collection('users').where('id', isNotEqualTo: user.uid).snapshots();
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(List<String> userIDs) {
+    return firestore.collection('users').where('id', whereIn: userIDs).snapshots();
+  }
+
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyUsersID() {
+    return firestore.collection('users').doc(user.uid).collection('added_users').snapshots();
   }
 
   //For updating user info(called from profile screen)

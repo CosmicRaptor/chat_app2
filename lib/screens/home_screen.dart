@@ -83,26 +83,36 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.add_comment_outlined),
       ),
-      body: StreamBuilder(
-        stream: APIs.getAllUsers(),
-        builder: (context, snapshot) {
-          final data = snapshot.data?.docs;
-          list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
-          if (list.isNotEmpty) {
-            return ListView.builder(
-                itemCount: _isSearching ? _searchList.length : list.length,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index){
-                  return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
-                });
-        }
-        else{
-          return const Center(
-            child: Text('Nothing to see here!', style: TextStyle(fontSize: 20),),
+      body: StreamBuilder(stream: APIs.getMyUsersID() ,builder: (context, snapshot){
+        switch(snapshot.connectionState){
+          case ConnectionState.waiting:
+          case ConnectionState.none:
+            return  Center(child: Text('Loading!', style: TextStyle(fontSize: 20, color: selectedTheme == 'Light' ? Colors.black : Colors.white70),));
+
+          case ConnectionState.active:
+          case ConnectionState.done:
+
+            return StreamBuilder(
+              stream: APIs.getAllUsers(snapshot.data?.docs.map((e) => e.id).toList() ?? []),
+              builder: (context, snapshot) {
+                final data = snapshot.data?.docs;
+                list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                if (list.isNotEmpty) {
+                  return ListView.builder(
+                      itemCount: _isSearching ? _searchList.length : list.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index){
+                        return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
+                      });
+                }
+                else{
+                  return Center(
+                    child: Text('Nothing to see here!', style: TextStyle(fontSize: 20, color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
+                  );
+                }
+              }
           );
-          }
-    }
-      ),
+      }}),
     );
   }
 
@@ -161,6 +171,13 @@ class _HomeScreenState extends State<HomeScreen> {
             //update button
             MaterialButton(
                 onPressed: () {
+                  if(email.isNotEmpty) {
+                    APIs.addUser(email).then((value) {
+                      if(!value) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Oops! Could not add that user.', textAlign: TextAlign.center,)));
+                      }
+                    });
+                  }
                   //hide alert dialog
                   Navigator.pop(context);
                   //APIs.updateMessage(widget.message, updatedMsg);
