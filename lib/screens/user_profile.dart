@@ -119,13 +119,13 @@ class _UserProfileState extends State<UserProfile> {
                           //Server image
                               ClipRRect(
                               borderRadius: BorderRadius.circular(200),
-                          child: CachedNetworkImage(
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                            imageUrl: widget.user.image,
-                            placeholder: (context, url) => const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person),),
+                              child: CachedNetworkImage(
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.cover,
+                              imageUrl: widget.user.image,
+                              placeholder: (context, url) => const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person),),
                           ),
                         ),
                       Positioned(

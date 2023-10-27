@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app2/main.dart';
 import 'package:chat_app2/models/chat_user.dart';
 import 'package:chat_app2/models/message.dart';
+import 'package:chat_app2/screens/profile_screen_from_chat.dart';
 import 'package:chat_app2/widgets/message_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _appbar(){
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (_) => UserProfileFromChat(user: widget.user)));
+      },
       child: Row(
         children: [
           IconButton(onPressed: (){
