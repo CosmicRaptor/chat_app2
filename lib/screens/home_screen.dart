@@ -1,13 +1,10 @@
 
 import 'package:chat_app2/api/apis.dart';
 import 'package:chat_app2/main.dart';
-import 'package:chat_app2/screens/auth/login_screen.dart';
 import 'package:chat_app2/screens/user_profile.dart';
 import 'package:chat_app2/widgets/chat_user_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/chat_user.dart';
 
@@ -81,10 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: selectedColor,
-        onPressed: () async{
-          await FirebaseAuth.instance.signOut();
-          await GoogleSignIn().signOut();
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginScreen()));
+        onPressed: () {
+          _addChatUserDialog();
         },
         child: const Icon(Icons.add_comment_outlined),
       ),
@@ -109,5 +104,72 @@ class _HomeScreenState extends State<HomeScreen> {
     }
       ),
     );
+  }
+
+  void _addChatUserDialog() {
+    String email = '';
+
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
+          contentPadding: const EdgeInsets.only(
+              left: 24, right: 24, top: 20, bottom: 10),
+
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+
+          //title
+          title: Row(
+            children: [
+              Icon(
+                Icons.person_add,
+                color: selectedColor,
+                size: 28,
+              ),
+              const SizedBox(width: 10,),
+              Text('Add user', style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),)
+            ],
+          ),
+
+          //content
+          content: TextFormField(
+            maxLines: null,
+            style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),
+            onChanged: (value) => email = value,
+            decoration: InputDecoration(
+                hintText: 'example@example.com',
+                hintStyle: TextStyle(color: selectedTheme == 'Light' ? Colors.black45 : Colors.white30),
+                prefixIcon: Icon(Icons.email_outlined, color: selectedColor,),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),)),
+          ),
+
+          //actions
+          actions: [
+            //cancel button
+            MaterialButton(
+                onPressed: () {
+                  //hide alert dialog
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.blue, fontSize: 16),
+                )),
+
+            //update button
+            MaterialButton(
+                onPressed: () {
+                  //hide alert dialog
+                  Navigator.pop(context);
+                  //APIs.updateMessage(widget.message, updatedMsg);
+                },
+                child: const Text(
+                  'Add',
+                  style: TextStyle(color: Colors.blue, fontSize: 16),
+                ))
+          ],
+        ));
   }
 }
