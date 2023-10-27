@@ -1,3 +1,4 @@
+import 'package:chat_app2/main.dart';
 import 'package:chat_app2/models/message.dart';
 import 'package:chat_bubbles/bubbles/bubble_normal_image.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
@@ -29,21 +30,21 @@ class _MessageCardState extends State<MessageCard> {
     if (widget.message.type == Type.text) {
       return BubbleSpecialOne(text: widget.message.msg,
         isSender: false,
-        color: Colors.grey.shade300,
-        textStyle: const TextStyle(fontSize: 20),);
+        color: selectedTheme == 'Light' ? Colors.grey.shade300 : Colors.grey.shade700,
+        textStyle:  TextStyle(fontSize: 20,color: selectedTheme == 'Light' ? Colors.black : Colors.white),);
     }
     else {
-      return BubbleNormalImage(id: widget.message.sent, image: Image.network(widget.message.msg), color: Colors.grey.shade300, isSender: false,);
+      return BubbleNormalImage(id: widget.message.sent, image: Image.network(widget.message.msg), color: selectedTheme == 'Light' ? Colors.grey.shade300 : Colors.grey.shade700, isSender: false,);
     }
   }
 
   //Our message
   Widget _blueMessage(){
     if (widget.message.type == Type.text){
-      return BubbleSpecialOne(text: widget.message.msg, isSender: true, color: Colors.indigo, textStyle: const TextStyle(color: Colors.white, fontSize: 20),);
+      return BubbleSpecialOne(text: widget.message.msg, isSender: true, color: selectedColor, textStyle: const TextStyle(color: Colors.white, fontSize: 20),);
     }
     else {
-      return BubbleNormalImage(id: widget.message.sent, image: Image.network(widget.message.msg), color: Colors.indigo, isSender: true,);
+      return BubbleNormalImage(id: widget.message.sent, image: Image.network(widget.message.msg), color: selectedColor, isSender: true,);
     }
   }
 }

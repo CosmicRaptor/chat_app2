@@ -10,6 +10,7 @@ import 'package:chat_app2/widgets/color_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -50,12 +51,32 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
   }
 
+  bool _isDarkMode = selectedTheme == 'Light' ? false : true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
       appBar: AppBar(
         title: const Text('Profile'),
         backgroundColor: selectedColor,
+        actions: [
+          IconButton(onPressed: () {
+            if (!_isDarkMode) {
+              DB.setTheme('Dark');
+              SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(systemNavigationBarColor: const Color.fromRGBO(30, 30, 32, 1), statusBarColor: selectedColor));
+            }
+            else {
+              DB.setTheme('Light');
+              SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(systemNavigationBarColor:Colors.white, statusBarColor: selectedColor));
+            }
+            setState(() {
+              _isDarkMode =! _isDarkMode;
+              widget.updateState();
+              getTheme();
+            });
+          }, icon: Icon(_isDarkMode ? Icons.nightlight : Icons.sunny))
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.redAccent,
@@ -116,30 +137,32 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                Text(widget.user.email, style: const TextStyle(color: Colors.black54, fontSize: 16),),
+                Text(widget.user.email, style:  TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70, fontSize: 16),),
                 const SizedBox(height: 40,),
                 TextFormField(
+                  style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white),
                   initialValue: widget.user.name,
                   onSaved: (val) => APIs.loggedUser.name = val ?? '',
                   validator: (val) => val != null && val.isNotEmpty ? null : 'Required Field',
                   decoration:  InputDecoration(
                     prefixIcon:  Icon(Icons.person, color: selectedColor),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    label: const Text('Username')
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: selectedTheme == 'Light' ? Colors.white70 : Colors.black)),
+                    label:  Text('Username', style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),)
                   ),
                 ),
                 const SizedBox(height: 40,),
                 TextFormField(
+                  style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white),
                   initialValue: widget.user.about,
                   onSaved: (val) => APIs.loggedUser.about = val ?? '',
                   validator: (val) => val != null && val.isNotEmpty ? null : 'Required Field',
                   decoration:  InputDecoration(
                       prefixIcon:  Icon(Icons.edit, color: selectedColor,),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                      label: const Text('About me')
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: selectedTheme == 'Light' ? Colors.white70 : Colors.black)),
+                      label:  Text('About me', style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),)
                   ),
                 ),
-                const SizedBox(height: 50,),
+                const SizedBox(height: 30,),
                 ColorPickerWidget(onColorSelected: () => setTheStateAfterButtonClick()),
                 ElevatedButton.icon(onPressed: (){
                   if (_formKey.currentState!.validate()) {

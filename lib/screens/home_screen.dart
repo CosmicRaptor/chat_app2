@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: selectedTheme == 'Light' ? Colors.white : Colors.grey.shade900,
+      backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
       appBar: AppBar(
         backgroundColor: selectedColor,
         title: _isSearching ?

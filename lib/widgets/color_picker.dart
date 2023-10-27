@@ -4,6 +4,8 @@ import 'package:chat_app2/api/local_database.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class ColorPickerWidget extends StatefulWidget {
   final Function onColorSelected;
   const ColorPickerWidget({super.key, required this.onColorSelected});
@@ -22,7 +24,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
       child: Padding(
         padding: const EdgeInsets.all(6),
         child: Card(
-          elevation: 2,
+          color: selectedTheme == 'Light' ? Colors.white : Colors.grey.shade900,
+          elevation: 0,
           child: ColorPicker(
             enableShadesSelection: false,
             pickersEnabled: const   <ColorPickerType, bool> {
@@ -44,11 +47,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
             borderRadius: 22,
             heading: Text(
               'Select color',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            subheading: Text(
-              'Select color shade',
-              style: Theme.of(context).textTheme.titleSmall,
+              style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white, fontSize: 20),
             ),
           ),
         ),

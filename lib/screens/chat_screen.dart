@@ -30,6 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
         appBar: AppBar(
           backgroundColor: selectedColor,
           automaticallyImplyLeading: false,
@@ -139,9 +140,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 }, icon:  const Icon(Icons.emoji_emotions_outlined), color: selectedColor,),
                 Expanded(child: TextField(
                   controller: _textController,
-                  decoration: const InputDecoration(border: InputBorder.none,
-                  hintText: 'Message'),
-                  style: const TextStyle(color: Colors.black54),
+                  decoration:  InputDecoration(border: InputBorder.none,
+                  hintText: 'Message',
+                  hintStyle: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70)),
+                  style:  TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),
                 )),
                 IconButton(onPressed: () async {
                   final ImagePicker picker = ImagePicker();

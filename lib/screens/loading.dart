@@ -18,7 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2), () async{
-      SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(systemNavigationBarColor: selectedTheme == 'Light' ? Colors.white : Colors.grey.shade900, statusBarColor: selectedColor));
+      SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(systemNavigationBarColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1), statusBarColor: selectedColor));
       if(APIs.auth.currentUser != null) {
         //Navigator.pop(context);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));

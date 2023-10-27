@@ -24,7 +24,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: selectedTheme == 'Light' ? Colors.white : Colors.grey.shade800,
+      color: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(33, 47, 61, 1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: InkWell(
