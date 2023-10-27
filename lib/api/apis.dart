@@ -57,12 +57,16 @@ class APIs {
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(List<String> userIDs) {
-    return firestore.collection('users').where('id', whereIn: userIDs).snapshots();
+    return firestore.collection('users').where('id', whereIn: userIDs.isEmpty ? [''] : userIDs).snapshots();
   }
 
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getMyUsersID() {
     return firestore.collection('users').doc(user.uid).collection('added_users').snapshots();
+  }
+
+  static Future<void> sendFirstMessage(ChatUser chatuser, String msg, Type type) async {
+    await firestore.collection('users').doc(chatuser.id).collection('adder_users').doc(user.uid).set({}).then((value) => sendMessage(chatuser, msg, type));
   }
 
   //For updating user info(called from profile screen)

@@ -178,9 +178,15 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: IconButton(onPressed: (){
               if (_textController.text.isNotEmpty){
-                APIs.sendMessage(widget.user, _textController.text, Type.text);
-                _textController.text = '';
+                if(list.isNotEmpty){
+                  APIs.sendMessage(widget.user, _textController.text, Type.text);
+                  _textController.text = '';
               }
+              else{
+                  APIs.sendFirstMessage(widget.user, _textController.text, Type.text);
+                  _textController.text = '';
+                }
+    }
             }, icon: const Icon(Icons.send, color: Colors.white,)))
       ],
     );

@@ -91,25 +91,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
           case ConnectionState.active:
           case ConnectionState.done:
-
             return StreamBuilder(
               stream: APIs.getAllUsers(snapshot.data?.docs.map((e) => e.id).toList() ?? []),
               builder: (context, snapshot) {
-                final data = snapshot.data?.docs;
-                list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
-                if (list.isNotEmpty) {
-                  return ListView.builder(
-                      itemCount: _isSearching ? _searchList.length : list.length,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index){
-                        return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
-                      });
+                switch(snapshot.connectionState){
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                  final data = snapshot.data?.docs;
+                  list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                  if (list.isNotEmpty) {
+                    return ListView.builder(
+                        itemCount: _isSearching ? _searchList.length : list.length,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index){
+                          return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
+                        });
+                  }
+                  else{
+                    return Center(
+                      child: Text('Nothing to see here!', style: TextStyle(fontSize: 20, color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
+                    );
+                  }
                 }
-                else{
-                  return Center(
-                    child: Text('Nothing to see here!', style: TextStyle(fontSize: 20, color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
-                  );
-                }
+
               }
           );
       }}),
