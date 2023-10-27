@@ -15,7 +15,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Only allow app in portrait mode
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) async{
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) async {
     await _getColor();
     await getTheme();
     _initialiseFirebase();
@@ -31,18 +32,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.indigo.shade900,
-          centerTitle: true
-        )
-      ),
+          appBarTheme: AppBarTheme(
+              backgroundColor: Colors.indigo.shade900, centerTitle: true)),
       home: LoadingScreen(),
     );
   }
@@ -55,10 +52,10 @@ _initialiseFirebase() async {
   );
 }
 
-_getColor() async{
+_getColor() async {
   selectedColor = Color(await DB.getColor());
 }
 
-getTheme() async{
+getTheme() async {
   selectedTheme = await DB.getTheme();
 }

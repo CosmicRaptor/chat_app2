@@ -41,28 +41,28 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: selectedColor,
         title: _isSearching ?
-            TextField(
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Name/Email',
-                hintStyle: TextStyle(fontSize: 17, color: Colors.white)
-              ),
-              autofocus: true,
-              style: const TextStyle(
-                fontSize: 17, color: Colors.white, letterSpacing: 1,
-              ),
-              onChanged: (val){
-                _searchList.clear();
-                for (var i in list){
-                  if (i.name.toLowerCase().contains(val) || i.email.toLowerCase().contains(val)){
-                    _searchList.add(i);
-                  }
-                  setState(() {
-                    _searchList;
-                  });
-                }
-              },
-            )
+        TextField(
+          decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'Name/Email',
+              hintStyle: TextStyle(fontSize: 17, color: Colors.white)
+          ),
+          autofocus: true,
+          style: const TextStyle(
+            fontSize: 17, color: Colors.white, letterSpacing: 1,
+          ),
+          onChanged: (val){
+            _searchList.clear();
+            for (var i in list){
+              if (i.name.toLowerCase().contains(val) || i.email.toLowerCase().contains(val)){
+                _searchList.add(i);
+              }
+              setState(() {
+                _searchList;
+              });
+            }
+          },
+        )
             : const Text('Damned Chat'),
         leading: const Icon(CupertinoIcons.home),
         actions: [
@@ -92,33 +92,33 @@ class _HomeScreenState extends State<HomeScreen> {
           case ConnectionState.active:
           case ConnectionState.done:
             return StreamBuilder(
-              stream: APIs.getAllUsers(snapshot.data?.docs.map((e) => e.id).toList() ?? []),
-              builder: (context, snapshot) {
-                switch(snapshot.connectionState){
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                  final data = snapshot.data?.docs;
-                  list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
-                  if (list.isNotEmpty) {
-                    return ListView.builder(
-                        itemCount: _isSearching ? _searchList.length : list.length,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index){
-                          return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
-                        });
+                stream: APIs.getAllUsers(snapshot.data?.docs.map((e) => e.id).toList() ?? []),
+                builder: (context, snapshot) {
+                  switch(snapshot.connectionState){
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      final data = snapshot.data?.docs;
+                      list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                      if (list.isNotEmpty) {
+                        return ListView.builder(
+                            itemCount: _isSearching ? _searchList.length : list.length,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index){
+                              return ChatUserCard(user: _isSearching ? _searchList[index] : list[index],);
+                            });
+                      }
+                      else{
+                        return Center(
+                          child: Text('Nothing to see here!', style: TextStyle(fontSize: 20, color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
+                        );
+                      }
                   }
-                  else{
-                    return Center(
-                      child: Text('Nothing to see here!', style: TextStyle(fontSize: 20, color: selectedTheme == 'Light' ? Colors.black : Colors.white70),),
-                    );
-                  }
-                }
 
-              }
-          );
-      }}),
+                }
+            );
+        }}),
     );
   }
 
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 hintStyle: TextStyle(color: selectedTheme == 'Light' ? Colors.black45 : Colors.white30),
                 prefixIcon: Icon(Icons.email_outlined, color: selectedColor,),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),)),
+                  borderRadius: BorderRadius.circular(15),)),
           ),
 
           //actions

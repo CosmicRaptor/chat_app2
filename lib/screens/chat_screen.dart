@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                       if (list.isNotEmpty) {
                         return ListView.builder(
-                          reverse: true,
+                            reverse: true,
                             itemCount: list.length,
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index){
@@ -70,15 +70,15 @@ class _ChatScreenState extends State<ChatScreen> {
               _chatInput(),
               if (_showEmoji == true)
                 SizedBox(
-                  height: 300,
-                  child: EmojiPicker(
+                    height: 300,
+                    child: EmojiPicker(
 
-                  textEditingController: _textController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
-                  config: const Config(
-                    columns: 7,
-                    emojiSizeMax: 32 * (1.0)
-                  )
-                ))
+                        textEditingController: _textController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                        config: const Config(
+                            columns: 7,
+                            emojiSizeMax: 32 * (1.0)
+                        )
+                    ))
             ],
           ),
         ),
@@ -144,8 +144,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(child: TextField(
                   controller: _textController,
                   decoration:  InputDecoration(border: InputBorder.none,
-                  hintText: 'Message',
-                  hintStyle: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70)),
+                      hintText: 'Message',
+                      hintStyle: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70)),
                   style:  TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white70),
                 )),
                 IconButton(onPressed: () async {
@@ -181,12 +181,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 if(list.isNotEmpty){
                   APIs.sendMessage(widget.user, _textController.text, Type.text);
                   _textController.text = '';
-              }
-              else{
+                }
+                else{
                   APIs.sendFirstMessage(widget.user, _textController.text, Type.text);
                   _textController.text = '';
                 }
-    }
+              }
             }, icon: const Icon(Icons.send, color: Colors.white,)))
       ],
     );

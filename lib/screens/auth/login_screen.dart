@@ -41,8 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await APIs.createUser().then((value){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
         });
-        }}
-      );
+      }}
+    );
   }
 
   Future<UserCredential> _signInWithGoogle() async {
@@ -73,12 +73,12 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           AnimatedPositioned(
-              duration: const Duration(seconds: 1),
-              height: mq.height * 0.6,
-              width: mq.width * 0.6,
-              right: _isAnimated ? mq.width * 0.20 : -mq.width * 0.60,
-              top: mq.height * 0.05,
-              child: SvgPicture.asset('images/icon.svg'),
+            duration: const Duration(seconds: 1),
+            height: mq.height * 0.6,
+            width: mq.width * 0.6,
+            right: _isAnimated ? mq.width * 0.20 : -mq.width * 0.60,
+            top: mq.height * 0.05,
+            child: SvgPicture.asset('images/icon.svg'),
           ),
           Positioned(
             bottom: mq.height * 0.15,

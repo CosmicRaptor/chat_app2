@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DateUtil{
   static String getLastMessageTime(
-  {required BuildContext context, required String time}){
+      {required BuildContext context, required String time}){
     final Date = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
     final DateTime now = DateTime.now();
 

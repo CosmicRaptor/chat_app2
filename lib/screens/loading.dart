@@ -22,11 +22,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
       if(APIs.auth.currentUser != null) {
         //Navigator.pop(context);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
-    }
+      }
       else{
         //Navigator.pop(context);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginScreen()));
-    }
+      }
     });
     super.initState();
   }
