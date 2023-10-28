@@ -92,7 +92,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                                   : Colors.white70),
                         )
                       : Text(
-                          widget.user.createdAt,
+                          DateUtil.getLastMessageTime(context: context, time: widget.user.createdAt),
                           style: TextStyle(
                               color: selectedTheme == 'Light'
                                   ? Colors.black
