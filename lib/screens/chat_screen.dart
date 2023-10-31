@@ -1,4 +1,5 @@
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,8 +11,10 @@ import 'package:chat_app2/widgets/message_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:image_picker/image_picker.dart';
 import '../api/apis.dart';
+import '../models/dateformatting.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser user;
@@ -56,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             itemCount: list.length,
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index){
-                              return MessageCard(message: list[index],);
+                              return _getSlidable(index);
                             });
                       }
                       else{
@@ -67,6 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     }
                 ),
               ),
+              const SizedBox(height: 10,),
               _chatInput(),
               if (_showEmoji == true)
                 SizedBox(
@@ -142,6 +146,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   });
                 }, icon:  const Icon(Icons.emoji_emotions_outlined), color: selectedColor,),
                 Expanded(child: TextField(
+                  minLines: 1,
+                  maxLines: 5,
                   controller: _textController,
                   decoration:  InputDecoration(border: InputBorder.none,
                       hintText: 'Message',
@@ -190,5 +196,73 @@ class _ChatScreenState extends State<ChatScreen> {
             }, icon: const Icon(Icons.send, color: Colors.white,)))
       ],
     );
+  }
+
+  Widget _getSlidable(int index){
+    var message = list[index];
+    if(widget.user.id == list[index].fromID)
+    {
+      return Slidable(
+          startActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context) {
+                  log(list[index].msg);
+                  _textController.text = 'Re: ${list[index].msg}\n';
+                },
+                backgroundColor: selectedTheme == 'Light'
+                    ? Colors.white
+                    : const Color.fromRGBO(30, 30, 32, 1),
+                foregroundColor:
+                    selectedTheme == 'Light' ? Colors.black : Colors.white,
+                icon: Icons.reply,
+              ),
+              SlidableAction(
+                  onPressed: (context){
+                    print('pressed');
+                    showDialog(context: context, builder: (_) => AlertDialog(
+                      backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
+                      title: Text('Info', style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white),),
+                      content: Text('Sent at: ${DateUtil.getLastMessageTime(context: context, time: message.sent)}\n Type: ${message.type == Type.text ? 'Text' : 'Image'}', style: TextStyle(color: selectedTheme == 'Light' ? Colors.black : Colors.white),),
+                    ));
+                  },
+                  backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
+                  foregroundColor: selectedTheme == 'Light' ? Colors.black : Colors.white,
+                  icon: Icons.info
+              )
+            ],
+          ),
+          child: MessageCard(
+            message: list[index],
+          ));
+    }
+    else {
+      return Slidable(
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context){log(list[index].msg); _textController.text = 'Re: ${list[index].msg}\n';},
+                backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
+                foregroundColor: selectedTheme == 'Light' ? Colors.black : Colors.white,
+                icon: Icons.reply,
+              ),
+              SlidableAction(
+                  onPressed: (context){
+                    print('pressed');
+                    showDialog(context: context, builder: (_) => AlertDialog(
+                      title: const Text('Info'),
+                      content: Text('Sent at: ${DateUtil.getLastMessageTime(context: context, time: message.sent)}\nType: ${message.type == Type.text ? 'Text' : 'Image'}'),
+                    ));
+                  },
+                  backgroundColor: selectedTheme == 'Light' ? Colors.white : const Color.fromRGBO(30, 30, 32, 1),
+                  foregroundColor: selectedTheme == 'Light' ? Colors.black : Colors.white,
+                  icon: Icons.info
+              )
+            ],
+          ),
+          child: MessageCard(message: list[index],));
+    }
   }
 }
